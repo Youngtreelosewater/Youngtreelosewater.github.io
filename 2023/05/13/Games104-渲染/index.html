@@ -1,0 +1,730 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>子木逝水 | 子木逝水</title><meta name="author" content="子木逝水"><meta name="copyright" content="子木逝水"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="引擎的渲染实践 图形学一般不关注硬件实现，更注重算法以及数学的正确性  30fps 实时&#x2F;10fps 可交互 离线   Challenges  各种各样的材质、大量的后处理、光照运算；非常复杂的组合 ALL in one 深度适配当代硬件 减少掉帧，保证每帧计算时间不超过一定值 可以吃满显卡，cpu只能占用10%~20%   工程实践  内容  Basics of game Render">
+<meta property="og:type" content="article">
+<meta property="og:title" content="子木逝水">
+<meta property="og:url" content="http://example.com/2023/05/13/Games104-%E6%B8%B2%E6%9F%93/index.html">
+<meta property="og:site_name" content="子木逝水">
+<meta property="og:description" content="引擎的渲染实践 图形学一般不关注硬件实现，更注重算法以及数学的正确性  30fps 实时&#x2F;10fps 可交互 离线   Challenges  各种各样的材质、大量的后处理、光照运算；非常复杂的组合 ALL in one 深度适配当代硬件 减少掉帧，保证每帧计算时间不超过一定值 可以吃满显卡，cpu只能占用10%~20%   工程实践  内容  Basics of game Render">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://images5.alphacoders.com/603/603031.jpg">
+<meta property="article:published_time" content="2023-05-13T15:32:18.745Z">
+<meta property="article:modified_time" content="2023-05-13T15:32:29.157Z">
+<meta property="article:author" content="子木逝水">
+<meta property="article:tag" content="keywords">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://images5.alphacoders.com/603/603031.jpg"><link rel="shortcut icon" href="https://th.bing.com/th/id/OIP.PS7yKvljN-AaW5noKxr8IgHaEn?w=272&h=180&c=7&r=0&o=5&pid=1.7"><link rel="canonical" href="http://example.com/2023/05/13/Games104-%E6%B8%B2%E6%9F%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查詢的內容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切換為繁體","cht_to_chs":"你已切換為簡體","day_to_night":"你已切換為深色模式","night_to_day":"你已切換為淺色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-right"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '子木逝水',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-13 23:32:29'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://th.bing.com/th/id/OIP.TkHxv1RMmir9btaKgFp8YgHaEo?w=271&amp;h=180&amp;c=7&amp;r=0&amp;o=5&amp;pid=1.7" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">標籤</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分類</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="子木逝水"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://th.bing.com/th/id/OIP.A653vTSEt0wCdhMaelLQLQHaFU?w=247&amp;h=180&amp;c=7&amp;r=0&amp;o=5&amp;pid=1.7"/><span class="site-name">子木逝水</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜尋</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">無題</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2023-05-13T15:32:18.745Z" title="發表於 2023-05-13 23:32:18">2023-05-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2023-05-13T15:32:29.157Z" title="更新於 2023-05-13 23:32:29">2023-05-13</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字數總計:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀時長:</span><span>10分鐘</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="引擎的渲染实践"><a href="#引擎的渲染实践" class="headerlink" title="引擎的渲染实践"></a>引擎的渲染实践</h1><ul>
+<li><p>图形学一般不关注硬件实现，更注重算法以及数学的正确性</p>
+<ul>
+<li>30fps 实时&#x2F;10fps 可交互</li>
+<li>离线</li>
+</ul>
+</li>
+<li><p>Challenges</p>
+<ul>
+<li>各种各样的材质、大量的后处理、光照运算；非常复杂的组合 ALL in one</li>
+<li>深度适配当代硬件</li>
+<li>减少掉帧，保证每帧计算时间不超过一定值</li>
+<li>可以吃满显卡，cpu只能占用10%~20%</li>
+</ul>
+</li>
+<li><p>工程实践</p>
+</li>
+<li><p>内容</p>
+<ul>
+<li>Basics of game Render<ul>
+<li>硬件</li>
+<li>渲染数据的组织</li>
+<li>可见性裁剪</li>
+</ul>
+</li>
+<li>材质 shader 光照<ul>
+<li>PBR（SG、MR）</li>
+<li>shader模型</li>
+<li>点光影、方向光；IBL、simple GI</li>
+</ul>
+</li>
+<li>特殊<ul>
+<li>地形</li>
+<li>天空 云雾</li>
+<li>后处理</li>
+</ul>
+</li>
+<li>Pipline<ul>
+<li>deferred 延迟、前向渲染</li>
+<li>显卡提交屏幕，绘制内容的管理</li>
+<li>Tiled-based rendering</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>游戏引擎设计与硬件架构设计密切相关</p>
+</li>
+<li><p>子网格设计用于支持多种材质的模型</p>
+</li>
+<li><p>使用剔除裁剪绘制尽可能少的对象</p>
+</li>
+<li><p>GPU驱动：随着GPU越来越强，将更多的工作移至GPU</p>
+</li>
+</ul>
+<h2 id="渲染系统的对象"><a href="#渲染系统的对象" class="headerlink" title="渲染系统的对象"></a>渲染系统的对象</h2><ul>
+<li>光栅化 顶点找到材质纹理计算光照等等最后成像素</li>
+<li>绘制<ul>
+<li>投影和光栅化</li>
+<li>着色 shading<ul>
+<li>constants 常量 parameters 变量</li>
+<li>texture sampling<ul>
+<li>Mipmap  （低频滤波）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="GPU"><a href="#GPU" class="headerlink" title="GPU"></a>GPU</h2><p>专用硬件解决大量工作</p>
+<ul>
+<li>SIMD and SIMT<ul>
+<li>SIMD 四个通道相加 同时处理四个数的加法</li>
+<li>SIMT 几百个核</li>
+</ul>
+</li>
+<li>CPU与GPU：几个博士和几千个小学生</li>
+<li>重要的概念：做绘制算法、所有运算时，用同样的代码，让所有人一起跑，每个人访问自己的数据</li>
+<li>GPU架构<ul>
+<li>费米架构，新的安培，最新的光追架构</li>
+<li>![[Pasted image 20230426174201.png]]</li>
+<li>图形处理集群<ul>
+<li>Streaming Multiprocessor <ul>
+<li>处理非常耗时的纹理采样，以及复杂的数学计算（三角函数，PS：不求精度可以泰勒展开乘多项式）</li>
+<li>NV的叫warp,AMD的叫weavrfront,power vr的叫usc；</li>
+<li>stream multi processor是NV处理warp的东西</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CPU与GPU的数据流动有成本，高延迟，有限的带宽<ul>
+<li>最好CPU单向传数据给GPU</li>
+</ul>
+</li>
+<li>Cashe 缓存<ul>
+<li>CPU从内存拿数据到缓存的时间周期，足够缓存的数据做上百次加法运算</li>
+</ul>
+</li>
+</ul>
+<h2 id="Mesh-Render-Component"><a href="#Mesh-Render-Component" class="headerlink" title="Mesh Render Component"></a>Mesh Render Component</h2><p>组件通过Renderable辨认</p>
+<ul>
+<li>绘制<ul>
+<li>Mesh 表达 <ul>
+<li>顶点：位置、颜色、UV、等<ul>
+<li>三角形：每三个顶点组成三角形</li>
+<li>索引存储<ul>
+<li>三角形之间共用很多顶点，顶点数量只有三角形的一半，减少6倍以上的数据存储量</li>
+<li>![[0}YAHFR4WYB%]B6S8)QN4_E.jpg]]</li>
+<li>顶点存储到缓存里，对访问友好</li>
+<li>每个顶点单独定义一个法线方向</li>
+<li>![[Pasted image 20230426175907.png]]</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Material<ul>
+<li>确定物体外观，光线与物体的交互</li>
+<li>![[Pasted image 20230426180717.png]]</li>
+<li>纹理</li>
+<li>Shader<ul>
+<li>即是源码，也是资产</li>
+</ul>
+</li>
+<li>Texture</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GO SubMesh<ul>
+<li>根据材质切分Mesh，切成SubMesh</li>
+<li>Mesh全部放在一个大Buffer，通过偏移确定</li>
+<li>SubMesh的顶点</li>
+<li>![[Pasted image 20230426181517.png]]</li>
+</ul>
+</li>
+<li>优化 <ul>
+<li>资源池，将shader、mesh、texture划分，索引</li>
+<li>![[Pasted image 20230426182002.png]]</li>
+</ul>
+</li>
+<li>实例化 合批<ul>
+<li>将场景的物理依照材质进行排序，一次材质，绘制所有的submesh</li>
+<li>GPU实例化<ul>
+<li>当多数子物体一样，重复设置VB vertex Buffer 顶点buffer.、IB index buffer 索引buffer</li>
+<li>Shader将一次drawCall，设置一次VB、IB，和绘制的位移数据，创建成百上千的物体</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="可见性裁剪"><a href="#可见性裁剪" class="headerlink" title="可见性裁剪"></a>可见性裁剪</h2><p>剔除与裁剪</p>
+<ul>
+<li>包围盒与视线锥<ul>
+<li>包围盒 【AABB 仅存对角俩个端点，![[Pasted image 20230427111513.png]]</li>
+<li>剔除用 四叉树与BVH （BVH常用，适用动态场景）![[Pasted image 20230427111905.png]]</li>
+<li>PVS 【游戏引擎行业之父John Carmark发明的，利于资源的加载![[Pasted image 20230427112200.png]]</li>
+<li>GPU Culling：不用精巧的算法，仅用GPU<ul>
+<li>能用硬件，就用硬件</li>
+<li>Early-Z，深度测试，先用深度绘制场景，挡住的像素跳过后面的渲染</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="纹理压缩"><a href="#纹理压缩" class="headerlink" title="纹理压缩"></a>纹理压缩</h2><p>![[Pasted image 20230427140734.png]]</p>
+<ul>
+<li>压缩思想：Block Compression![[Pasted image 20230427141151.png]]<ul>
+<li>相邻像素之间的关联度，每个像素跟最亮值与最小值的比例关系</li>
+<li>移动端的ASTC的压缩效率最好，解压缩也不低。但压缩运算太费，无法运行中进行压缩</li>
+<li>分块压缩，采样只解压对应分块</li>
+</ul>
+</li>
+</ul>
+<h2 id="建模工具"><a href="#建模工具" class="headerlink" title="建模工具"></a>建模工具</h2><p>![[Pasted image 20230427142614.png]]</p>
+<h2 id="模型管线"><a href="#模型管线" class="headerlink" title="模型管线"></a>模型管线</h2><ul>
+<li>艺术家创作的模型细节越来越多<br>Cluster-Based Mesh Pipline![[Pasted image 20230427143149.png]]</li>
+</ul>
+<h1 id="渲染中，光与材质的数学魔法"><a href="#渲染中，光与材质的数学魔法" class="headerlink" title="渲染中，光与材质的数学魔法"></a>渲染中，光与材质的数学魔法</h1><p>![[Pasted image 20230428152612.png]]</p>
+<ul>
+<li>光的核心，光子<ul>
+<li>emit 发射、bounce 反弹、absorb 吸收、perception 感知 是render的起源</li>
+</ul>
+</li>
+<li>材质<ul>
+<li>如何与光子产生物质反应</li>
+</ul>
+</li>
+<li>Shader<ul>
+<li>如何写以及复杂的运算</li>
+</ul>
+</li>
+</ul>
+<h2 id="The-Rendering-Equation"><a href="#The-Rendering-Equation" class="headerlink" title="The Rendering Equation"></a>The Rendering Equation</h2><p>Kajiya sig1986 提出的渲染方程![[Pasted image 20230428154313.png]]<br>看见的光子 &#x3D; 自发光 + 反射方程 * 接收的光强 * 光与法线的夹角<br>ira 进来的光 入射的能量、ra 出去的光 辐射出去的能量【黑体辐射<br>光可线性叠加</p>
+<ul>
+<li>Rendering Equation 的 Challenge</li>
+<li>1nd 很难得到ira![[Pasted image 20230509145325.png]]</li>
+<li>![[Pasted image 20230509145346.png]]<ul>
+<li>阴影<ul>
+<li>可见性折磨人，无法兼顾abcd</li>
+</ul>
+</li>
+<li>复杂的光源 定向、点、聚、面</li>
+</ul>
+</li>
+<li>2nd 拿到ira 做shading运算，积分运算![[Pasted image 20230509145303.png]]<ul>
+<li>在球面函数上，把光与BRDF在一起积分，实时如何快速知道光与材质之间卷积的结果 知道整个球面的光，如何做出材质的表现也不简单</li>
+</ul>
+</li>
+<li>3nd 第一步的Light Output 将作为下一次的Input 无限递归，又将1复杂化  ![[Pasted image 20230509145216.png]]<ul>
+<li>所有物质都将成为光源</li>
+</ul>
+</li>
+</ul>
+<h2 id="基础光照"><a href="#基础光照" class="headerlink" title="基础光照"></a>基础光照</h2><ul>
+<li><p>Simple Light Solution</p>
+<ul>
+<li>光源 大多数定向光，特殊用点与聚光灯</li>
+<li>Ambient 用基础色</li>
+<li>早期硬件支持</li>
+<li>![[Pasted image 20230509150428.png]]</li>
+</ul>
+</li>
+<li><p>Reflection </p>
+<ul>
+<li>环境贴图 cubeMap<br>![[Pasted image 20230509151024.png]]</li>
+</ul>
+</li>
+<li><p>材质</p>
+<ul>
+<li>最前沿的涉及光的波动，经验派 Bling phone模型</li>
+<li>bling phone模型的问题<ul>
+<li>![[Pasted image 20230509152840.png]]离线渲染中会出大问题，能量保守(收敛)  Energy Conservative，能量不会守恒，因为光会被材质吸收</li>
+<li>塑料质感，与PBR有差距</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Shadow</p>
+<ul>
+<li>早期硬件不支持ShadowMap![[Pasted image 20230509153523.png]]</li>
+<li>游戏过去二十年只用了ShadowMap<ul>
+<li>光源渲染深度，相机对每个点 与深度图计算</li>
+<li>![[Pasted image 20230509154930.png]]<ul>
+<li>光源的深度图的采样率 与 相机的所看的点 采样率不一样</li>
+<li>自遮挡，bias容差，阴影浮空 离脚</li>
+<li>夕阳的采样率问题，用俩套算法，倾斜到一定角度后用算法b，其余用算法a</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>![[Pasted image 20230509155745.png]]可以移动端以及游戏超低配</p>
+</li>
+</ul>
+<h2 id="Pre-computed-Global-lllumination-预计算全局光照"><a href="#Pre-computed-Global-lllumination-预计算全局光照" class="headerlink" title="Pre-computed Global lllumination 预计算全局光照"></a>Pre-computed Global lllumination 预计算全局光照</h2><ul>
+<li>5~10年前 AAA所用的技术</li>
+<li>![[Pasted image 20230509160255.png]]<ul>
+<li>Ambient直接提，让空间变得很平面</li>
+</ul>
+</li>
+<li>全局光照 球面空间的采样<ul>
+<li>如何Diffuse面与 球面光照算积分<ul>
+<li>蒙特卡洛 往球面扔百个采样点 每个方向都算一下再积分一下</li>
+<li>卷积运算 每个像素 Shading时与整个球面光照积分，做采样做累加</li>
+</ul>
+</li>
+<li>快速积分 傅里叶变换<ul>
+<li>循环信号 拆解成不同频率信号的累加</li>
+<li>卷积运算</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Spherical Harmonics<ul>
+<li>![[Pasted image 20230509162945.png]]<ul>
+<li>sin cos 函数集</li>
+<li>0阶 将整个球面加权平均</li>
+<li>一阶 xyz平方和为一，俩个自由度</li>
+</ul>
+</li>
+<li>![[Pasted image 20230509163005.png]]<br>  * <ul>
+<li>氢原子的电子轨道</li>
+</ul>
+</li>
+<li>![[Pasted image 20230509183753.png]]<ul>
+<li>light probe 所看见的光</li>
+<li>低频 描述了光强</li>
+</ul>
+</li>
+<li>![[Pasted image 20230509163759.png]]<ul>
+<li>表达一个球状的光，需要12个参数，因为RGB通道3张图，一张图用一阶SH有4个参数</li>
+<li>0阶 等同于 将整个环境光场做一次加权平均，因为现在游戏都是HDR，采取HDR压缩</li>
+<li>后面的采用LDR的压缩</li>
+<li>存一个RGBA 即为32Bits，用一个带Aphla的颜色空间，就能存每个点上的光场 高精度</li>
+</ul>
+</li>
+<li>球面上俩个函数的卷积 简化成：俩个函数投影到SH的俩个参数，通过这俩个数的卷积 &#x3D; 结果</li>
+</ul>
+</li>
+<li>LightMap 预计算GI<ul>
+<li>最早用于计算Shadow，随着ShadowMap的发展，太土了就遗弃了</li>
+<li>![[Pasted image 20230510134703.png]]</li>
+<li>irradiance probe烘焙的</li>
+<li>优势<ul>
+<li>运行高效</li>
+<li>因为离线bake，有soft的软阴影</li>
+</ul>
+</li>
+<li>劣势<ul>
+<li>长时间高耗的预计算</li>
+<li>只有静态场景和静态灯光</li>
+<li>封装和GPU的存储成本</li>
+</ul>
+</li>
+<li>思想<ul>
+<li>空间换时间</li>
+<li>游戏场景转化为2维texture【甚至3维volume】可以做很多计算</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Probes<ul>
+<li>Light Probes <ul>
+<li>动态物体加GI</li>
+<li>精度低 数量多</li>
+</ul>
+</li>
+<li>Reflection Probes<ul>
+<li>精度高 数量少</li>
+</ul>
+</li>
+<li>优势<ul>
+<li>运行高效</li>
+<li>同时处理静态与动态物体</li>
+<li>处理漫反射与镜面反射的shading</li>
+<li>现在计算机的优势，可以实时更新Light probe，<ul>
+<li>判断是否变化，空闲时再更新，</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>劣势<ul>
+<li>也需要预计算</li>
+<li>没法实现GI的细节、soft shadow柔和阴影</li>
+<li>采样率只有LightMap几百分之一</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于物理的材质"><a href="#基于物理的材质" class="headerlink" title="基于物理的材质"></a>基于物理的材质</h2><p>PBR 材质 光照 相机</p>
+<ul>
+<li>微表面理论 Microfacet Theory![[Pasted image 20230510140722.png]]<ul>
+<li>镜面与粗糙</li>
+</ul>
+</li>
+<li>BRDF模型![[Pasted image 20230510141240.png]]<ul>
+<li>漫反射<ul>
+<li>c&#x2F;π， c 为进来多少的能量</li>
+</ul>
+</li>
+<li>镜面反射<ul>
+<li>DFG，</li>
+<li>D法线分布方程![[Pasted image 20230510141511.png]]<ul>
+<li>高光的表达<ul>
+<li>phone 突兀、GGX有渐变【音箱 高音脆 低音广</li>
+</ul>
+</li>
+<li>粗糙度 越高 随机度越高</li>
+</ul>
+</li>
+<li>G 微表面几何的内部遮挡![[Pasted image 20230510144249.png]]<ul>
+<li>遮挡对光线与视线是等价的<ul>
+<li>遮挡率为0.3 则最后到相机为 0.7 * 0.7 &#x3D; 0.49</li>
+</ul>
+</li>
+<li>巧妙利用了D项引入的粗糙度</li>
+</ul>
+</li>
+<li>F 菲涅尔![[Pasted image 20230510145518.png]]<ul>
+<li>5次方 大牛推出来的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MERL 将现实物质推理出BRDF所需参数的设备![[Pasted image 20230510145907.png]]<ul>
+<li>粗糙度 菲涅尔 diffuse</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>disney BRDF![[Pasted image 20230510150803.png]]<ul>
+<li>![[Pasted image 20230510151746.png]]</li>
+</ul>
+</li>
+<li>目前主流的规范<ul>
+<li>SG![[Pasted image 20230510151906.png]]<ul>
+<li>漫反射(金属颜色为黑)、Specular 反射贴图 f0、glossiness 光泽度【粗糙度<ul>
+<li>Specular 艺术家设置不好会导致菲涅尔爆炸 f0</li>
+</ul>
+</li>
+<li>![[Pasted image 20230510153619.png]]</li>
+</ul>
+</li>
+<li>MR 在SG外部包装一下![[Pasted image 20230510154932.png]]<ul>
+<li>非金属部分的f0为0.04</li>
+</ul>
+</li>
+<li>MR<ul>
+<li>优势<ul>
+<li>较少纹理内存，MR都是灰度图</li>
+<li>减少因为提供不正确的f0导致的错误，无法控制f0</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>白边，金属与非金属过渡时，分辨率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SG<ul>
+<li>优势<ul>
+<li>白边不明显</li>
+<li>Specular 可以控制f0</li>
+</ul>
+</li>
+<li>劣势<ul>
+<li>影响f0</li>
+<li>更多的内存</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="IBL"><a href="#IBL" class="headerlink" title="IBL"></a>IBL</h2><ul>
+<li>背光面与环境光的表达。CubeMap 表达四面八方的光照</li>
+<li>核心思想：对光照做预处理，计算 整个环境对点的光照 和 材质的卷积<ul>
+<li>SH太粗糙，只能有明暗的感觉</li>
+</ul>
+</li>
+<li>BRDF的俩个Part 接受IBL</li>
+<li>diffuse![[Pasted image 20230510162815.png]]</li>
+<li>Specular![[Pasted image 20230510163317.png]]<ul>
+<li>三个乘法的积分 变成 三个积分的乘法</li>
+<li>粗糙度影响积分结果<ul>
+<li>通过硬件的cubemap的Mipmap，将不同粗糙度接受的结果，存进Mipmap层级，需要单独算出来，存储光照![[Pasted image 20230510164042.png]]</li>
+<li>通过一张LUT 输入粗糙度与角度跟环境的关系，决定Mipmap层级 存储transfer![[Pasted image 20230510164402.png]]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>![[Pasted image 20230510164441.png]]</li>
+</ul>
+<h2 id="Shadow"><a href="#Shadow" class="headerlink" title="Shadow"></a>Shadow</h2><ul>
+<li>CSM Cascade Shadow![[Pasted image 20230510165114.png]]<ul>
+<li>级联阴影之间的混合<ul>
+<li>级联重叠部分会有缝</li>
+<li>因为级联之间分辨率不一致</li>
+<li>shader根据像素在混合带的位置在俩个值进行线性插值</li>
+</ul>
+</li>
+<li>假设绘制用了30ms，阴影计算会吃到4、5ms，很难做到2ms以下</li>
+<li>优点<ul>
+<li>快速生成深度图，3倍的开销</li>
+<li>效果好</li>
+<li>最好的解决shadow问题</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>没有彩色阴影，半透明物体透射出不透明的阴影</li>
+<li>无法提供高质量的区域阴影</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>PCF、基于实战的PCSS![[Pasted image 20230510170352.png]]</li>
+<li>VSSM![[Pasted image 20230510170510.png]]</li>
+<li></li>
+</ul>
+<h2 id="Real-time-global-Illumination"><a href="#Real-time-global-Illumination" class="headerlink" title="Real time global Illumination"></a>Real time global Illumination</h2><p>![[Pasted image 20230510171144.png]]</p>
+<p>![[Pasted image 20230510171351.png]]<br>![[Pasted image 20230510171732.png]]</p>
+<h2 id="Shader-Manege"><a href="#Shader-Manege" class="headerlink" title="Shader Manege"></a>Shader Manege</h2><ul>
+<li>大量的shader</li>
+<li>通过宏定义 将一个大shader 拆成小shader，每一个变种都是一个分支<ul>
+<li>点光源还是面光源，全局光照下，SH下，单双面渲染，带不带Alpha</li>
+<li>分支会导致结束时间不一致，GPU使用simt架构希望时间一致<ul>
+<li>将所有分支编译成大量shader![[Pasted image 20230510172244.png]]</li>
+</ul>
+</li>
+<li>修改时只需要改大的，不用一个个改小的</li>
+</ul>
+</li>
+<li>shader在不同平台的编译![[Pasted image 20230510172801.png]]</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>对对对</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>对对对</td>
+<td>去去去</td>
+<td></td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">子木逝水</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/13/Games104-%E6%B8%B2%E6%9F%93/">http://example.com/2023/05/13/Games104-%E6%B8%B2%E6%9F%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="http://example.com" target="_blank">子木逝水</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://images5.alphacoders.com/603/603031.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/05/13/Games104-%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%95%B4%E4%BD%93Pipline/" title=""><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://images5.alphacoders.com/603/603031.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://th.bing.com/th/id/OIP.TkHxv1RMmir9btaKgFp8YgHaEo?w=271&amp;h=180&amp;c=7&amp;r=0&amp;o=5&amp;pid=1.7" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">子木逝水</div><div class="author-info__description">说明</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">標籤</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分類</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Youngtreelosewater"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Youngtreelosewater" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:zijiehh@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://space.bilibili.com/13584622?spm_id_from=333.337.0.0" target="_blank" title="fa-sharp fa-solid fa-face-awesome"><i class="fas fa-霹雳霹雳"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">有朋远方来</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E6%93%8E%E7%9A%84%E6%B8%B2%E6%9F%93%E5%AE%9E%E8%B7%B5"><span class="toc-text">引擎的渲染实践</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="toc-text">渲染系统的对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GPU"><span class="toc-text">GPU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mesh-Render-Component"><span class="toc-text">Mesh Render Component</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7%E8%A3%81%E5%89%AA"><span class="toc-text">可见性裁剪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9"><span class="toc-text">纹理压缩</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E6%A8%A1%E5%B7%A5%E5%85%B7"><span class="toc-text">建模工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E7%AE%A1%E7%BA%BF"><span class="toc-text">模型管线</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E4%B8%AD%EF%BC%8C%E5%85%89%E4%B8%8E%E6%9D%90%E8%B4%A8%E7%9A%84%E6%95%B0%E5%AD%A6%E9%AD%94%E6%B3%95"><span class="toc-text">渲染中，光与材质的数学魔法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Rendering-Equation"><span class="toc-text">The Rendering Equation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%85%89%E7%85%A7"><span class="toc-text">基础光照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pre-computed-Global-lllumination-%E9%A2%84%E8%AE%A1%E7%AE%97%E5%85%A8%E5%B1%80%E5%85%89%E7%85%A7"><span class="toc-text">Pre-computed Global lllumination 预计算全局光照</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E6%9D%90%E8%B4%A8"><span class="toc-text">基于物理的材质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IBL"><span class="toc-text">IBL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shadow"><span class="toc-text">Shadow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Real-time-global-Illumination"><span class="toc-text">Real time global Illumination</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shader-Manege"><span class="toc-text">Shader Manege</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 子木逝水</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="簡繁轉換">繁</button><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到頂部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜尋</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  資料庫載入中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜尋文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div><!-- hexo injector body_end start --><script data-pjax src="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.js"></script><script data-pjax>
+  function gitcalendar_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<div class="recent-post-item" id="gitcalendarBar" style="width:100%;height:auto;padding:10px;"><style>#git_container{min-height: 280px}@media screen and (max-width:650px) {#git_container{min-height: 0px}}</style><div id="git_loading" style="width:10%;height:100%;margin:0 auto;display: block;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></path></svg><style>#git_container{display: none;}</style></div><div id="git_container"></div></div>';
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      console.log('已挂载gitcalendar')
+      }
+
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+        gitcalendar_injector_config()
+        GitCalendarInit("https://python-github-calendar-api.vercel.app/api/api?Youngtreelosewater",['#d9e0df', '#c6e0dc', '#a8dcd4', '#9adcd2', '#89ded1', '#77e0d0', '#5fdecb', '#47dcc6', '#39dcc3', '#1fdabe', '#00dab9'],'Youngtreelosewater')
+    }
+  </script><!-- hexo injector body_end end --></body></html>
